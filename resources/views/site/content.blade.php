@@ -3,7 +3,26 @@
     @foreach($pages as $key => $page)
 
         @if($key%2 == 0)
-            <section id="home" class="top_cont_outer">
+            <section id="{{ $page->alias }}" class="top_cont_outer">
+
+
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+
                 <div class="hero_wrapper">
                     <div class="container">
                         <div class="hero_section">
@@ -11,7 +30,7 @@
                                 <div class="col-lg-5 col-sm-7">
                                     <div class="top_left_cont zoomIn wow animated">
                                         <p>{!! $page->text !!}</p>
-                                        <a href="#service" class="read_more2">Читать далее...</a></div>
+                                        </div>
                                 </div>
                                 <div class="col-lg-7 col-sm-5">
                                     {!! Html::image('assets/img/'.$page->img, '', array('class' => 'zoomIn wow animated')) !!}
@@ -25,7 +44,7 @@
             <!--Hero_Section-->
         @else
 
-            <section id="aboutUs"><!--Aboutus-->
+            <section id="{{ $page->alias }}"><!--Aboutus-->
                 <div class="inner_wrapper">
                     <div class="container">
                         <h2>{!! $page->name !!}</h2>
@@ -38,11 +57,6 @@
                                     <div class=" delay-01s animated fadeInDown wow animated">
                                         {!! $page->text !!}
                                     </div>
-                                    <div class="work_bottom"><span>Узнать больше...</span>
-                                        <a href="{{ route('page', array('alias' => $page->alias)) }}"
-                                           class="contact_btn">Связаться с нами</a></div>
-                                </div>
-
                             </div>
 
 
@@ -182,7 +196,7 @@
 
 <section class="page_section team" id="team"><!--main-section team-start-->
     <div class="container">
-        <h2>Наша оманда</h2>
+        <h2>Наша команда</h2>
         <h6>Lorem ipsum dolor sit amet, consectetur adipiscing.</h6>
         <div class="team_section clearfix">
             @foreach($workers as $k=>$worker)
@@ -256,16 +270,21 @@
                 </div>
                 <div class="col-lg-8 wow fadeInLeft delay-06s">
                     <div class="form">
-                        <input class="input-text" type="text" name="" value="Ваше имя *"
-                               onFocus="if(this.value==this.defaultValue)this.value='';"
-                               onBlur="if(this.value=='')this.value=this.defaultValue;">
-                        <input class="input-text" type="text" name="" value="Ваш E-mail *"
-                               onFocus="if(this.value==this.defaultValue)this.value='';"
-                               onBlur="if(this.value=='')this.value=this.defaultValue;">
-                        <textarea class="input-text text-area" cols="0" rows="0"
-                                  onFocus="if(this.value==this.defaultValue)this.value='';"
-                                  onBlur="if(this.value=='')this.value=this.defaultValue;">Ваше сообщение *</textarea>
-                        <input class="input-btn" type="submit" value="Отправить">
+
+                        <form action="{{ route('home') }}" method="post">
+                            <input class="input-text" type="text" name="name" value="Ваше имя *"
+                                   onFocus="if(this.value==this.defaultValue)this.value='';"
+                                   onBlur="if(this.value=='')this.value=this.defaultValue;">
+                            <input class="input-text" type="text" name="email" value="Ваш E-mail *"
+                                   onFocus="if(this.value==this.defaultValue)this.value='';"
+                                   onBlur="if(this.value=='')this.value=this.defaultValue;">
+                            <textarea class="input-text text-area" name="text" cols="0" rows="0"
+                                      onFocus="if(this.value==this.defaultValue)this.value='';"
+                                      onBlur="if(this.value=='')this.value=this.defaultValue;">Ваше сообщение *</textarea>
+                            <input class="input-btn" type="submit" value="Отправить">
+
+                            {{ csrf_field() }}
+                        </form>
                     </div>
                 </div>
             </div>

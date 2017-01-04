@@ -11,10 +11,10 @@
 |
 */
 
-Route::group(['middleware' => 'web'], function () {
+Route::group([], function () {
 
 	Route::match(['get', 'post'], '/', ['uses' =>'IndexController@index', 'as' => 'home']);
-	Route::get('/page/{alias}', ['uses' => 'PageController@index', 'as' => 'page']);
+
 
 	Route::auth();
 });
@@ -24,6 +24,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
 	// admin/
 	Route::get('/', function () {
+
+		if (view()->exists('admin.index')) {
+			$data = ['title' => 'Панель администратора'];
+
+			return view('admin.index', $data);
+		}
+
+
 	});
 
 
@@ -45,7 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 			// admin/portfolio/add
 			Route::match(['get', 'post'], '/add', ['uses' => 'PortfolioAddController@index', 'as' => 'portfolioAdd']);
 			// admin/portfolio/edit/{id}
-			Route::match(['get', 'post', 'delete'], '/edit/{id}', ['uses' => 'PortfolioEditController@index', 'as' => 'portfolioEdit']);
+			Route::match(['get', 'post', 'delete'], '/edit/{page}', ['uses' => 'PortfolioEditController@index', 'as' => 'portfolioEdit']);
 		});
 
 	// Services' manipulation
@@ -62,3 +70,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
 });
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');

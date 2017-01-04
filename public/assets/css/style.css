@@ -100,7 +100,8 @@ p {
 
 .logo {
     float: left;
-    margin-top: 8px;
+    margin-top: 4px;
+    margin-bottom:4px;
 	position: relative;
 	z-index: 2;
 }
